@@ -24,7 +24,7 @@ class ilSrRoutinePreviewRenderer extends ilSrAbstractRoutinePreviewGenerator
 {
     // ilSrRoutinePreviewAsyncGUI paths:
     protected const PREVIEW_STYLESHEET = 'Customizing/global/plugins/Services/Cron/CronHook/SrLifeCycleManager/templates/default/css/routine_preview.css';
-    protected const PREVIEW_TEMPLATE = 'Customizing/global/plugins/Services/Cron/CronHook/SrLifeCycleManager/templates/default/tpl.routine_preview.html';
+    protected const PREVIEW_TEMPLATE = 'tpl.routine_preview.html';
     protected const PREVIEW_SCRIPT = 'Customizing/global/plugins/Services/Cron/CronHook/SrLifeCycleManager/templates/default/js/preview_loader.js';
 
     // ilSrRoutinePreviewAsyncGUI language variables:
@@ -58,7 +58,7 @@ class ilSrRoutinePreviewRenderer extends ilSrAbstractRoutinePreviewGenerator
 
     public function getLoader(): Component
     {
-        $template = new ilTemplate(self::PREVIEW_TEMPLATE, true, true);
+        $template = new ilTemplate(self::PREVIEW_TEMPLATE, true, true, ilSrLifeCycleManagerPlugin::PLUGIN_DIR_SERVER);
 
         $template->setVariable('MESSAGE', $this->translator->txt(self::MSG_LOADING));
         $template->setVariable('ASYNC_URL', $this->ajax_action);

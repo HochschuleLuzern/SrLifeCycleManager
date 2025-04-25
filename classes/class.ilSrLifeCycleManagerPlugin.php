@@ -28,6 +28,8 @@ use srag\Plugins\SrLifeCycleManager\ITranslator;
  */
 class ilSrLifeCycleManagerPlugin extends ilCronHookPlugin implements ITranslator
 {
+    public const PLUGIN_DIR_SERVER = './public/Customizing/global/plugins/Services/Cron/CronHook/SrLifeCycleManager/';
+
     /**
      * @var string plugin-directory relative to the ILIAS-installation path.
      */
