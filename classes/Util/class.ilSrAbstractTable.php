@@ -61,7 +61,7 @@ abstract class ilSrAbstractTable extends ilTable2GUI
         $this->setPrefix(ilSrLifeCycleManagerPlugin::PLUGIN_ID);
         $this->setRowTemplate(
             $this->getTemplateName(),
-            ilSrLifeCycleManagerPlugin::PLUGIN_DIR
+            'public/' . ilSrLifeCycleManagerPlugin::PLUGIN_DIR_WEB
         );
 
         parent::__construct($this->parent_gui, $parent_gui_cmd);

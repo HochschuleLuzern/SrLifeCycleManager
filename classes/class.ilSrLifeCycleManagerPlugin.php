@@ -31,7 +31,7 @@ class ilSrLifeCycleManagerPlugin extends ilCronHookPlugin implements ITranslator
     /**
      * @var string plugin-directory relative to the ILIAS-installation path.
      */
-    public const PLUGIN_DIR = './Customizing/global/plugins/Services/Cron/CronHook/SrLifeCycleManager/';
+    public const PLUGIN_DIR_WEB = './Customizing/global/plugins/Services/Cron/CronHook/SrLifeCycleManager/';
 
     /**
      * @var string plugin-id (MUST be the same as in plugin.php).
