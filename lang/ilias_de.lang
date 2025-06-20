@@ -38,10 +38,9 @@ msg_affected_routines#:#Es gibt Routinen die das aktuelle Objekt löschen könnt
 msg_assigned_routines#:#Es gibt Routinen die dem aktuellen Objekt zugewiesen sind:
 msg_routine_cant_extend#:#Objekte können von dieser Routine nicht verlängert werden.
 msg_routine_extended#:#Das Objekt wurde erfolgreich für %s Tage verlängert.
-msg_routine_extend_error#:#Das Objekt konnte nicht verlängert werden, ggf. haben Sie das bereits getan.
 msg_routine_cant_opt_out#:#Objekte können von dieser Routine nicht ignoriert werden.
 msg_routine_opted_out#:#Das Objekt wurde erfolgreich von dieser Routine ausgeschlossen.
-msg_routine_opt_out_error#:#Dieses Objekt konnte nicht von der Routine ausgeschlossen werden, ggf. haben Sie das bereits getan.
+msg_routine_already_opted_out#:#Dieses ILIAS-Objekt wurde bereits von der Löschung dieser Routine ausgeschlossen.
 msg_days_before_deletion_error#:#Eine Benachrichtigung die um diese Anzahl vor der Löschung geschickt wird existiert bereits.
 msg_assignment_success#:#Zusweisung(en) erfolgreich aktualisiert.
 msg_no_unassigned_routines#:#Es gibt keine Routinen mehr die diesem Objekt zugewiesen werden können.
@@ -51,7 +50,7 @@ msg_confirmation_event_error#:#Eine Benachrichtigung für dieses Event existiert
 msg_whitelist_invalid_token#:#Ihr Whitelist-Token ist nicht mehr gültig. Der Token ist entweder abgelaufen oder wurde bereits eingelöst.
 msg_routine_cant_undo_opt_out#:#Das aktuelle Objekt wurde nicht von der Löschung ausgeschlossen.
 msg_routine_undid_opt_out#:#Das aktuelle Objekt wird nicht mehr von der Löschung ausgeschlossen.
-msg_whitelist_not_cool#:#Das aktuelle Objekt kann noch nicht wieder verlängert werden.
+msg_whitelist_not_cool#:#Fehler: Die Lebensdauer dieses ILIAS-Objektes wurde bereits verlängert oder die Frist zur Verlängerung ist bereits abgelaufen.
 msg_number_less_than#:#Die eingegebene Zahl muss grösser oder gleich %s sein.
 msg_no_available_routines#:#Es gibt keine weiteren Routinen für dieses Objekt.
 

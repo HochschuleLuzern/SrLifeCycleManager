@@ -38,10 +38,9 @@ msg_affected_routines#:#There are routines that affect this object:
 msg_assigned_routines#:#There are routines assigned to this object:
 msg_routine_cant_extend#:#This routine cannot be extended.
 msg_routine_extended#:#This object has been successfully whitelisted for %s days.
-msg_routine_already_extended#:#The deletion of this object was already postponed.
 msg_routine_cant_opt_out#:#This routine cannot be opted out.
-msg_routine_opted_out#:#This object has been successfully whitelisted.
-msg_routine_already_opted_out#:#This object was already been whitelisted.
+msg_routine_opted_out#:#The object was successfully excluded from this routine.
+msg_routine_already_opted_out#:#This ILIAS-object has already been excluded from this routine.
 msg_days_before_deletion_error#:#A notification for this amount of days before submission already exists.
 msg_assignment_success#:#Assignment(s) successfully updated.
 msg_no_unassigned_routines#:#There are no routines available that don't already affect this object.
@@ -49,7 +48,7 @@ msg_this_may_take_a_while#:#Collecting Data, this may take a while ...
 msg_invalid_email#:#The submitted email address is invalid.
 msg_confirmation_event_error#:#A notification for this event already exists.
 msg_whitelist_invalid_token#:#Your whitelist token isn't valid anymore. It may have expired or has already been used.
-msg_whitelist_not_cool#:#The current object cannot be postponed again, yet.
+msg_whitelist_not_cool#:#Error: the deletion of this ILIAS-object has already been postponed or the limit of postponement is already reached.
 msg_routine_cant_undo_opt_out#:#The current object is not opted-out.
 msg_routine_undid_opt_out#:#The current object is no longer opted-out.
 msg_number_less_than#:#The submitted number must be greater or equal to %s.
