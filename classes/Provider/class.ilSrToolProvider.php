@@ -14,6 +14,7 @@ use srag\Plugins\SrLifeCycleManager\Routine\AffectingRoutineProvider;
 use srag\Plugins\SrLifeCycleManager\Routine\IRoutineRepository;
 use srag\Plugins\SrLifeCycleManager\Whitelist\IWhitelistRepository;
 use srag\Plugins\SrLifeCycleManager\Config\IConfig;
+use srag\Plugins\SrLifeCycleManager\ITranslator;
 use ILIAS\GlobalScreen\Scope\Tool\Provider\AbstractDynamicToolPluginProvider;
 use ILIAS\GlobalScreen\ScreenContext\Stack\ContextCollection;
 use ILIAS\GlobalScreen\ScreenContext\Stack\CalledContexts;
@@ -31,7 +32,6 @@ use ILIAS\UI\Component\Component;
  */
 class ilSrToolProvider extends AbstractDynamicToolPluginProvider
 {
-    public $if;
     // ilSrToolProvider language variables:
     protected const ACTION_ASSIGNMENTS_MANAGE = 'action_routine_assignment_manage';
     protected const ACTION_ROUTINE_MANAGE = 'action_routine_manage';
@@ -39,19 +39,18 @@ class ilSrToolProvider extends AbstractDynamicToolPluginProvider
     protected const LABEL_ASSIGNED_ROUTINES = 'label_assigned_routines';
     protected const CNF_TOOL_CONTROLS = 'cnf_tool_controls';
 
+    protected ilSrAssignmentRepository $assignment_repository;
+    protected ilSrRoutineListBuilder $routine_list_builder;
+    protected ilSrAccessHandler $access_handler;
     protected ?ilObject $request_object = null;
 
-    protected ilSrAssignmentRepository $assignment_repository;
-
-    protected IWhitelistRepository $whitelist_repository;
-
-    protected IRoutineRepository $routine_repository;
-
     protected AffectingRoutineProvider $routine_provider;
-
-    protected ilSrAccessHandler $access_handler;
-
+    protected IWhitelistRepository $whitelist_repository;
+    protected IRoutineRepository $routine_repository;
+    protected ITranslator $translator;
     protected IConfig $config;
+
+    public $if;
 
     /**
      * @inheritDoc
@@ -90,6 +89,8 @@ class ilSrToolProvider extends AbstractDynamicToolPluginProvider
         /** @var $plugin ilSrLifeCycleManagerPlugin */
         $plugin = $component_factory->getPlugin(ilSrLifeCycleManagerPlugin::PLUGIN_ID);
 
+        $this->translator = $plugin;
+
         $container = $plugin->getContainer();
 
         $this->request_object = $container
@@ -107,6 +108,16 @@ class ilSrToolProvider extends AbstractDynamicToolPluginProvider
         $this->routine_repository = $container->getRepositoryFactory()->routine();
         $this->routine_provider = $container->getAffectingRoutineProvider();
         $this->access_handler = $container->getAccessHandler();
+
+        $this->routine_list_builder = new ilSrRoutineListBuilder(
+            $this->dic->ui()->factory(),
+            $this->assignment_repository,
+            $this->routine_repository,
+            $this->whitelist_repository,
+            $this->translator,
+            $this->access_handler,
+            $this->dic->ctrl()
+        );
     }
 
     /**
@@ -138,55 +149,24 @@ class ilSrToolProvider extends AbstractDynamicToolPluginProvider
     {
         $object = ilObjectFactory::getInstanceByRefId($ref_id, false);
 
+        $routine_list_html = '';
         if (null === $object) {
-            return '';
+            return $routine_list_html;
         }
-
-        /** @var $translator ITranslator */
-        $translator = $this->plugin;
 
         $affecting_routines = $this->routine_provider->getAffectingRoutines($object);
-        $assigned_routines = $this->routine_repository->getAllByRefId($object->getRefId());
+        $routine_list_html .= $this->renderAffectedRoutineList($object, $affecting_routines);
 
-        // array_udiff() didn't seem to work in certain scenarios if the
-        // array sizes of both arrays were different, therefore I've used
-        // this stupid loop now. this is definitely a performance killer,
-        // maybe someone smart can figure this out :(.
-        $assigned_but_unaffecting_routines = [];
-        foreach ($assigned_routines as $assigned_routine) {
-            $assigned_routine_id = $assigned_routine->getRoutineId();
-            foreach ($affecting_routines as $affecting_routine) {
-                if ($assigned_routine_id === $affecting_routine->getRoutineId()) {
-                    continue 2;
-                }
-            }
-
-            $assigned_but_unaffecting_routines[] = $assigned_routine;
+        // in case we should only show the tool if there are affecting routines, it could
+        // be confusing to show assigned routines as well. This has been a design choice
+        // made during testing: https://jira.sr.solutions/browse/SRTEAM-582
+        if (!$this->config->shouldToolOnlyShowIfAffected()) {
+            $routine_list_html .= $this->renderAssignedRoutineList(
+                $object,
+                $affecting_routines,
+                $this->routine_repository->getAllByRefId($object->getRefId())
+            );
         }
-
-        $list_builder = new ilSrRoutineListBuilder(
-            $this->dic->ui()->factory(),
-            $this->assignment_repository,
-            $this->routine_repository,
-            $this->whitelist_repository,
-            $translator,
-            $this->access_handler,
-            $this->dic->ctrl()
-        );
-
-        $affecting_routine_list = $list_builder
-            ->reset()
-            ->withTitle($translator->txt(self::LABEL_AFFECTING_ROUTINES))
-            ->withAffectingRoutines($affecting_routines)
-            ->withCurrentObject($object)
-            ->getList();
-
-        $assigned_routine_list = $list_builder
-            ->reset()
-            ->withTitle($translator->txt(self::LABEL_ASSIGNED_ROUTINES))
-            ->withAssignedRoutines($assigned_but_unaffecting_routines)
-            ->withCurrentObject($object)
-            ->getList();
 
         return "
             <div id=\"srlcm-item-group\">
@@ -210,12 +190,52 @@ class ilSrToolProvider extends AbstractDynamicToolPluginProvider
                         max-width: calc(100% - 26px);
                     }
                 </style>
-                {$this->dic->ui()->renderer()->render([
-                    $affecting_routine_list,
-                    $assigned_routine_list
-                ])}
+                $routine_list_html
             </div>
         ";
+    }
+
+    protected function renderAffectedRoutineList(ilObject $object, array $affecting_routines): string
+    {
+        $affecting_routine_list = $this->routine_list_builder
+            ->reset()
+            ->withTitle($this->translator->txt(self::LABEL_AFFECTING_ROUTINES))
+            ->withAffectingRoutines($affecting_routines)
+            ->withCurrentObject($object)
+            ->getList();
+
+        return $this->dic->ui()->renderer()->render($affecting_routine_list);
+    }
+
+    protected function renderAssignedRoutineList(
+        ilObject $object,
+        array $affecting_routines,
+        array $assigned_routines
+    ): string {
+        // array_udiff() didn't seem to work in certain scenarios if the
+        // array sizes of both arrays were different, therefore I've used
+        // this stupid loop now. this is definitely a performance killer,
+        // maybe someone smart can figure this out :(.
+        $assigned_but_unaffecting_routines = [];
+        foreach ($assigned_routines as $assigned_routine) {
+            $assigned_routine_id = $assigned_routine->getRoutineId();
+            foreach ($affecting_routines as $affecting_routine) {
+                if ($assigned_routine_id === $affecting_routine->getRoutineId()) {
+                    continue 2;
+                }
+            }
+
+            $assigned_but_unaffecting_routines[] = $assigned_routine;
+        }
+
+        $assigned_routine_list = $this->routine_list_builder
+            ->reset()
+            ->withTitle($this->translator->txt(self::LABEL_ASSIGNED_ROUTINES))
+            ->withAssignedRoutines($assigned_but_unaffecting_routines)
+            ->withCurrentObject($object)
+            ->getList();
+
+        return $this->dic->ui()->renderer()->render($assigned_routine_list);
     }
 
     /**
@@ -319,9 +339,9 @@ class ilSrToolProvider extends AbstractDynamicToolPluginProvider
      */
     protected function getToolAvailabilityClosure(): Closure
     {
-        return fn(): bool => // the availability of the tool depends on the
-            // active state of the plugin.
-        (bool) $this->plugin->isActive();
+        // the availability of the tool depends on the
+        // active state of the plugin.
+        return fn(): bool => (bool) $this->plugin->isActive();
     }
 
     /**
@@ -331,10 +351,29 @@ class ilSrToolProvider extends AbstractDynamicToolPluginProvider
     {
         // the tool should be visible if an object was requested,
         // and at least one of the tool components should be rendered.
-        return fn(): bool => null !== $this->request_object && (
-            $this->shouldRenderRoutineControls() ||
-                $this->shouldRenderRoutineLists()
-        );
+        return fn(): bool => null !== $this->request_object
+            && $this->shouldToolBeVisible($this->request_object);
+    }
+
+    /**
+     * Returns whether the tool should be visible according to @see IConfig::CNF_TOOL_SHOW_IF_AFFECTED
+     */
+    protected function shouldToolBeVisible(\ilObject $object): bool
+    {
+        if ($this->config->shouldToolOnlyShowIfAffected()) {
+            return $this->isObjectAffected($object);
+        }
+        return $this->shouldRenderRoutineControls()
+            || $this->shouldRenderRoutineLists();
+    }
+
+    /**
+     * Returns whether the given $object is affected by at least one routine and
+     * would therefore be deleted someday.
+     */
+    protected function isObjectAffected(\ilObject $object): bool
+    {
+        return !empty($this->routine_provider->getAffectingRoutines($object));
     }
 
     /**

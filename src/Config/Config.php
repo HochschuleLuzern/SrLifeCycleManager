@@ -22,6 +22,7 @@ class Config implements IConfig
      * @param bool $tool_is_enabled
      * @param bool $tool_show_routines
      * @param bool $tool_show_controls
+     * @param bool $tool_show_if_affected
      * @param string|null $custom_email
      * @param array $mailing_blacklist
      * @param bool $force_mail_forwarding
@@ -33,6 +34,7 @@ class Config implements IConfig
         protected bool $tool_is_enabled = false,
         protected bool $tool_show_routines = false,
         protected bool $tool_show_controls = false,
+        protected bool $tool_show_if_affected = false,
         protected ?string $custom_email = null,
         protected array $mailing_blacklist = [],
         protected bool $force_mail_forwarding = false,
@@ -122,6 +124,23 @@ class Config implements IConfig
     public function setShouldToolShowControls(bool $should_show): IConfig
     {
         $this->tool_show_controls = $should_show;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function shouldToolOnlyShowIfAffected(): bool
+    {
+        return $this->tool_show_if_affected;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setToolOnlyShowIfAffected(bool $should_show): IConfig
+    {
+        $this->tool_show_if_affected = $should_show;
         return $this;
     }
 

@@ -98,6 +98,13 @@ class ConfigFormBuilder extends AbstractFormBuilder
                 ->withValue($this->config->shouldToolShowControls())
             ,
 
+            IConfig::CNF_TOOL_SHOW_IF_AFFECTED => $this->fields
+                ->checkbox(
+                    $this->translator->txt(IConfig::CNF_TOOL_SHOW_IF_AFFECTED),
+                    $this->translator->txt(IConfig::CNF_TOOL_SHOW_IF_AFFECTED . '_info'),
+                )->withValue($this->config->shouldToolOnlyShowIfAffected())
+            ,
+
         ], $this->translator->txt(IConfig::CNF_TOOL_IS_ENABLED));
 
         if (!$this->config->isToolEnabled()) {

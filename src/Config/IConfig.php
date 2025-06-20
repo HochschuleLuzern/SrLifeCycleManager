@@ -45,6 +45,12 @@ interface IConfig
     public const CNF_TOOL_SHOW_CONTROLS = 'cnf_tool_show_controls';
 
     /**
+     * @var string config primary key that determines if the tool is only visible if there
+     *             are routines affecting it (resulting in a deletion someday).
+     */
+    public const CNF_TOOL_SHOW_IF_AFFECTED = 'cnf_tool_show_if_affected';
+
+    /**
      * @var string config primary key to define a custom email-address from which the
      *             ilSrNotificationSender will send notifications.
      */
@@ -125,6 +131,17 @@ interface IConfig
      * @return IConfig
      */
     public function setShouldToolShowControls(bool $should_show): IConfig;
+
+    /**
+     * @return bool
+     */
+    public function shouldToolOnlyShowIfAffected(): bool;
+
+    /**
+     * @param bool $should_show
+     * @return IConfig
+     */
+    public function setToolOnlyShowIfAffected(bool $should_show): IConfig;
 
     /**
      * @return string|null

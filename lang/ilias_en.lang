@@ -81,6 +81,8 @@ cnf_role_manage_assignments#:#Manage assignments
 cnf_tool_is_enabled#:#Enable Tool
 cnf_tool_show_routines#:#Show active routines
 cnf_tool_show_controls#:#Show controls
+cnf_tool_show_if_affected#:#Only show when affected
+cnf_tool_show_if_affected_info#:#When active, the tool will only be visible when a routine would delete the current object someday.
 cnf_tool_controls#:#Controls
 cnf_custom_from_email#:#Email for external notifications
 cnf_mailing_blacklist#:#Mailing Blacklist

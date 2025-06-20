@@ -55,6 +55,7 @@ class ConfigFormProcessor extends AbstractFormProcessor
         $is_tool_enabled = (null !== $post_data[IConfig::CNF_TOOL_IS_ENABLED]);
         $show_routines = ($is_tool_enabled) ? $post_data[IConfig::CNF_TOOL_IS_ENABLED][IConfig::CNF_TOOL_SHOW_ROUTINES] : false;
         $show_controls = ($is_tool_enabled) ? $post_data[IConfig::CNF_TOOL_IS_ENABLED][IConfig::CNF_TOOL_SHOW_CONTROLS] : false;
+        $show_if_affected = ($is_tool_enabled) ? $post_data[IConfig::CNF_TOOL_IS_ENABLED][IConfig::CNF_TOOL_SHOW_IF_AFFECTED] : false;
         $user_ids = array_map('intval', ($post_data[IConfig::CNF_MAILING_BLACKLIST] ?? []));
         $is_debug_mode_enabled = $post_data[IConfig::CNF_DEBUG_MODE];
 
@@ -65,6 +66,7 @@ class ConfigFormProcessor extends AbstractFormProcessor
                 $is_tool_enabled,
                 $show_routines,
                 $show_controls,
+                $show_if_affected,
                 $post_data[IConfig::CNF_CUSTOM_FROM_EMAIL],
                 $user_ids,
                 $is_mail_forwarding_forced,

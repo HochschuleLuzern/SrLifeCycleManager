@@ -729,3 +729,15 @@ foreach ($legacy_group_value_mapping as $legacy_value => $new_value) {
     );
 }
 ?>
+<#27>
+<?php
+/** @var $ilDB ilDBInterface */
+$table_name = 'srlcm_configuration';
+
+if ($ilDB->tableExists($table_name)) {
+    $ilDB->insert($table_name, [
+        'identifier' => ['text', 'cnf_tool_show_if_affected'],
+        'configuration' => ['text', '0'],
+    ]);
+}
+?>
