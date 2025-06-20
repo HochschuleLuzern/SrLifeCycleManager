@@ -1,5 +1,10 @@
 # SrLifeCycleManager Changelog
 
+## 4.1.0
+
+- Added configuration for tool visibility so it can only be shown if there are affecting routines.
+- Updated error message for already postponed ILIAS objects and successful opt-outs. 
+
 ## 4.0.0
 
 - Added ILIAS 10 compatibility.
