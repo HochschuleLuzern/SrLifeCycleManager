@@ -79,7 +79,7 @@ background_task_started#:#Background-Task gestartet
 cnf_role_manage_routines#:#Routinen verwalten
 cnf_role_manage_assignments#:#Zuweisungen verwalten
 cnf_tool_is_enabled#:#Tool anzeigen
-cnf_tool_show_routines#:#Aktive routinen anzeigen
+cnf_tool_show_routines#:#Aktive Routinen anzeigen
 cnf_tool_show_controls#:#Verwaltung anzeigen
 cnf_tool_show_if_affected#:#Tool anzeigen wenn betroffen
 cnf_tool_show_if_affected_info#:#Wenn aktiv, wird das Tool nur angezeigt, wenn eine Routine das aktuelle Objekt löschen würde.
