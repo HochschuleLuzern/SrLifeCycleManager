@@ -90,7 +90,7 @@ class ilSrNotificationSender implements INotificationSender
         $message = $notification->getContent();
         $routine = null;
 
-        if (strpos($message, '[EXTENSION_LINK]')) {
+        if (mb_strpos($message, '[EXTENSION_LINK]') !== false) {
             $routine = $this->routine_repository->get($notification->getRoutineId());
 
             // link defaults to 'unavailable' if the routine doesn't support elongations.
@@ -103,7 +103,7 @@ class ilSrNotificationSender implements INotificationSender
             $message = str_replace('[EXTENSION_LINK]', $link, $message);
         }
 
-        if (strpos($message, '[OPT_OUT_LINK]')) {
+        if (mb_strpos($message, '[OPT_OUT_LINK]') !== false) {
             // use the previously fetched routine if possible.
             $routine ??= $this->routine_repository->get($notification->getRoutineId());
 
