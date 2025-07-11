@@ -1,5 +1,13 @@
 # SrLifeCycleManager Changelog
 
+## 4.1.1
+
+- Added info log message about cron jon crashes.
+- Updated error message for already used whitelist-tokens (extension- and opt-out-links).
+- Fixed an issue where dropdown menu's of asynchronously rendered previews did not work.
+- Fixed an issue where exceptions were not caught during object deletions.
+- Fixed an issue where extension- and opt-out-links were not always replaced correctly.
+
 ## 4.1.0
 
 - Added configuration for tool visibility so it can only be shown if there are affecting routines.
