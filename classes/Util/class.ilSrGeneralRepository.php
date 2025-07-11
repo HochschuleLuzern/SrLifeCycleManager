@@ -183,7 +183,7 @@ class ilSrGeneralRepository implements IGeneralRepository
         try {
             ilRepUtil::deleteObjects(0, [$ref_id]);
             return true;
-        } catch (ilRepositoryException) {
+        } catch (ilException) {
             return false;
         }
     }
