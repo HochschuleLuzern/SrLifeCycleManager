@@ -8,8 +8,9 @@ $(document).ready(function () {
 		let url = decodeURI(item.data("asyncUrl"));
 
 		$.get(url, function (data) {
-			let element = $.parseHTML(data);
-			item.html(element)
+			const element = $(`<div>${data}</div>`);
+			element.find("[data-replace-marker='script']").each((idx, s) => $.globalEval(s.innerHTML));
+			item.html(element);
 		});
 	});
 });
