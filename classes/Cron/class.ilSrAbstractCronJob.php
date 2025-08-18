@@ -86,7 +86,7 @@ abstract class ilSrAbstractCronJob extends ilCronJob
      */
     public function hasFlexibleSchedule(): bool
     {
-        return false;
+        return true;
     }
 
     /**
