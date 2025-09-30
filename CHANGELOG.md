@@ -1,5 +1,10 @@
 # SrLifeCycleManager Changelog
 
+## 4.1.2
+
+- Fixed an issue where invalid 'days before deletion' values in reminder-notification form was accepted.
+- Allow flexible cron-job schedule.
+
 ## 4.1.1
 
 - Added info log message about cron jon crashes.

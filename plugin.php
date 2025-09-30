@@ -1,7 +1,7 @@
 <?php
 
 $id = "srlcm";
-$version = "4.1.1";
+$version = "4.1.2";
 $ilias_min_version = "10.000";
 $ilias_max_version = "10.999";
 
